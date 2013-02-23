@@ -1,0 +1,63 @@
+#! /usr/bin/env python
+"""
+waitproc PID command
+
+options:
+ --delay: delay of the wait loop
+ --mines: search process only in user' processes
+"""
+
+import argparse
+import os
+import time
+import subprocess
+
+
+def main():
+    args = parse_arguments()
+    pid = int(args.pid)
+    delay = int(args.delay)
+    only_mine_procs = args.mines
+    cmd = args.cmd
+    while True:
+        if pid in list_processes(only_mine_procs):
+            time.sleep(delay)
+        else:
+            exec_cmd(cmd)
+            break
+
+def parse_arguments():
+    parser = argparse.ArgumentParser(description='Execute a command when another is ended')
+    
+    parser.add_argument("pid", type=int, help="pid of the pending process")
+    parser.add_argument("cmd", help="command executed when pid finished")
+    parser.add_argument('--delay', dest='delay', default=60, type=int, 
+                   help='wait DELAY seconds between two process checks')
+    parser.add_argument('--mines', action="store_true",
+                   help='search only in process owned by user')
+    return parser.parse_args()
+
+
+def list_processes(only_mine_procs):
+    cmd = ['ps', '--no-headers']
+    cmd += _mine_cmd(only_mine_procs)
+    cmd += ['-eo', 'pid,command']
+    p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+    stdout, stderr = p.communicate()
+    return [_get_pid(line) for line in stdout.split('\n') if line]
+
+def _mine_cmd(only_mine_procs):
+    if only_mine_procs:
+        return ["--users", os.getuid()]
+    else:
+        return []
+
+def _get_pid(line):
+    return int(line.split()[0]) 
+
+def exec_cmd(cmd):
+    subprocess.call(cmd.split())
+
+
+main()
+
