@@ -13,6 +13,8 @@ import time
 import subprocess
 
 
+DEFAULT_DELAY = 60
+
 def main():
     args = parse_arguments()
     pid = int(args.pid)
@@ -20,23 +22,25 @@ def main():
     only_mine_procs = args.mines
     cmd = args.cmd
     while True:
-        if pid in list_processes(only_mine_procs):
+        if process_is_running(pid, only_mine_procs):
             time.sleep(delay)
         else:
             exec_cmd(cmd)
             break
 
 def parse_arguments():
-    parser = argparse.ArgumentParser(description='Execute a command when another is ended')
+    parser = argparse.ArgumentParser(description='Execute a command when another process is ended')
     
     parser.add_argument("pid", type=int, help="pid of the pending process")
     parser.add_argument("cmd", help="command executed when pid finished")
-    parser.add_argument('--delay', dest='delay', default=60, type=int, 
+    parser.add_argument('--delay', dest='delay', default=DEFAULT_DELAY, type=int, 
                    help='wait DELAY seconds between two process checks')
     parser.add_argument('--mines', action="store_true",
-                   help='search only in process owned by user')
+                   help='search only in processes owned by user')
     return parser.parse_args()
 
+def process_is_running(pid, only_mine_procs):
+    return pid in list_processes(only_mine_procs)
 
 def list_processes(only_mine_procs):
     cmd = ['ps', '--no-headers']
