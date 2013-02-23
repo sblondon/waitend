@@ -1,6 +1,9 @@
 #! /usr/bin/env python
 """
-waitproc PID command
+usage: waitproc [--mines] [--delay DELAY] process command
+
+The process argument is either PID or name.
+
 
 options:
  --delay: delay of the wait loop
@@ -17,12 +20,12 @@ DEFAULT_DELAY = 60
 
 def main():
     args = parse_arguments()
-    pid = int(args.pid)
+    process = args.process
     delay = int(args.delay)
     only_mine_procs = args.mines
     cmd = args.cmd
     while True:
-        if process_is_running(pid, only_mine_procs):
+        if process_is_running(process, only_mine_procs):
             time.sleep(delay)
         else:
             exec_cmd(cmd)
@@ -31,7 +34,7 @@ def main():
 def parse_arguments():
     parser = argparse.ArgumentParser(description='Execute a command when another process is ended')
     
-    parser.add_argument("pid", type=int, help="pid of the pending process")
+    parser.add_argument("process", help="the pending process")
     parser.add_argument("cmd", help="command executed when pid finished")
     parser.add_argument('--delay', dest='delay', default=DEFAULT_DELAY, type=int, 
                    help='wait DELAY seconds between two process checks')
@@ -39,13 +42,18 @@ def parse_arguments():
                    help='search only in processes owned by user')
     return parser.parse_args()
 
-def process_is_running(pid, only_mine_procs):
-    return pid in list_processes(only_mine_procs)
+def process_is_running(process, only_mine_procs):
+    try:
+        pid = int(process)
+        return pid in list_pid_processes(only_mine_procs)
+    except ValueError:
+        return process in list_name_processes(only_mine_procs)
 
-def list_processes(only_mine_procs):
+
+def list_pid_processes(only_mine_procs):
     cmd = ['ps', '--no-headers']
     cmd += _mine_cmd(only_mine_procs)
-    cmd += ['-eo', 'pid,command']
+    cmd += ['-eo', 'pid']
     p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
     stdout, stderr = p.communicate()
     return [_get_pid(line) for line in stdout.split('\n') if line]
@@ -57,7 +65,19 @@ def _mine_cmd(only_mine_procs):
         return []
 
 def _get_pid(line):
-    return int(line.split()[0]) 
+    return int(line)
+
+def list_name_processes(only_mine_procs):
+    cmd = ['ps', '--no-headers']
+    cmd += _mine_cmd(only_mine_procs)
+    cmd += ['-eo', 'command']
+    p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+    stdout, stderr = p.communicate()
+    return [_get_process(line) for line in stdout.split('\n') if line]
+
+def _get_process(line):
+    return line.split()[0] 
+
 
 def exec_cmd(cmd):
     subprocess.call(cmd.split())
