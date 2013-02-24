@@ -1,7 +1,7 @@
 #! /bin/sh
 
 
-../waitproc 666 "echo test1"
-../waitproc --delay 10 666 "echo test2"
-../waitproc --mines 666 "echo test3"
+../src/waitproc 666 "echo test1"
+../src/waitproc --delay 10 666 "echo test2"
+../src/waitproc --mines 666 "echo test3"
 
