@@ -45,39 +45,30 @@ def parse_arguments():
 def process_is_running(process, only_mine_procs):
     try:
         pid = int(process)
-        return pid in list_pid_processes(only_mine_procs)
+        return pid in list_processes(only_mine_procs)
     except ValueError:
-        return process in list_name_processes(only_mine_procs)
+        return process in list_processes(only_mine_procs, is_pid=False)
 
-
-def list_pid_processes(only_mine_procs):
+def list_processes(only_mine_procs, is_pid=True):
+    if is_pid:
+        extract_line = lambda line: int(line)
+        output_format = "pid"
+    else:
+        extract_line = lambda line: line.split()[0]
+        output_format = "command"
+    
     cmd = ['ps', '--no-headers']
     cmd += _mine_cmd(only_mine_procs)
-    cmd += ['-eo', 'pid']
+    cmd += ['-eo', output_format]
     p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
     stdout, stderr = p.communicate()
-    return [_get_pid(line) for line in stdout.split('\n') if line]
+    return [extract_line(line) for line in stdout.split('\n') if line]
 
 def _mine_cmd(only_mine_procs):
     if only_mine_procs:
-        return ["--users", os.getuid()]
+        return ["--user", str(os.getuid())]
     else:
         return []
-
-def _get_pid(line):
-    return int(line)
-
-def list_name_processes(only_mine_procs):
-    cmd = ['ps', '--no-headers']
-    cmd += _mine_cmd(only_mine_procs)
-    cmd += ['-eo', 'command']
-    p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
-    stdout, stderr = p.communicate()
-    return [_get_process(line) for line in stdout.split('\n') if line]
-
-def _get_process(line):
-    return line.split()[0] 
-
 
 def exec_cmd(cmd):
     subprocess.call(cmd.split())
