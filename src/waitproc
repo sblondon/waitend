@@ -1,5 +1,14 @@
 #! /usr/bin/env python
+# -*- coding: utf8 -*-
+
 """
+waitproc   Copyright (C) 2013 Stéphane Blondon
+This tool is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 3 of the License, or
+(at your option) any later version.
+
+
 usage: waitproc [--mines] [--delay DELAY] process command
 
 The process argument is either PID or name.
@@ -12,8 +21,8 @@ options:
 
 import argparse
 import os
-import time
 import subprocess
+import time
 
 
 DEFAULT_DELAY = 60
@@ -28,7 +37,7 @@ def main():
         if process_is_running(process, only_mine_procs):
             time.sleep(delay)
         else:
-            exec_cmd(cmd)
+            execute_cmd(cmd)
             break
 
 def parse_arguments():
@@ -45,14 +54,16 @@ def parse_arguments():
 def process_is_running(process, only_mine_procs):
     try:
         pid = int(process)
-        return process in list_processes(only_mine_procs)
+        return pid in list_processes(only_mine_procs)
     except ValueError:
         return process in list_processes(only_mine_procs, is_pid=False)
 
 def list_processes(only_mine_procs, is_pid=True):
     if is_pid:
+        extract_line = lambda line: int(line)
         OUTPUT_FORMAT = "pid"
     else:
+        extract_line = lambda line: line.split()[0]
         OUTPUT_FORMAT = "command"
 
     cmd = ['ps', '--no-headers']
@@ -60,7 +71,7 @@ def list_processes(only_mine_procs, is_pid=True):
     cmd.extend(['-eo', OUTPUT_FORMAT])
     p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
     stdout, stderr = p.communicate()
-    return [line for line in stdout.split('\n') if line]
+    return [extract_line(line) for line in stdout.split('\n') if line]
 
 def _mine_cmd(only_mine_procs):
     if only_mine_procs:
@@ -68,7 +79,7 @@ def _mine_cmd(only_mine_procs):
     else:
         return []
 
-def exec_cmd(cmd):
+def execute_cmd(cmd):
     subprocess.call(cmd.split())
 
 

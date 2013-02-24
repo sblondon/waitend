@@ -22,3 +22,9 @@ Requirements
  - `ps`
 
 
+Licence
+-------
+
+Released under GNU General Public License version 3 or (at your option) any
+later version.
+
