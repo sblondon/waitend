@@ -45,24 +45,22 @@ def parse_arguments():
 def process_is_running(process, only_mine_procs):
     try:
         pid = int(process)
-        return pid in list_processes(only_mine_procs)
+        return process in list_processes(only_mine_procs)
     except ValueError:
         return process in list_processes(only_mine_procs, is_pid=False)
 
 def list_processes(only_mine_procs, is_pid=True):
     if is_pid:
-        extract_line = lambda line: int(line)
-        output_format = "pid"
+        OUTPUT_FORMAT = "pid"
     else:
-        extract_line = lambda line: line.split()[0]
-        output_format = "command"
-    
+        OUTPUT_FORMAT = "command"
+
     cmd = ['ps', '--no-headers']
-    cmd += _mine_cmd(only_mine_procs)
-    cmd += ['-eo', output_format]
+    cmd.extend(_mine_cmd(only_mine_procs))
+    cmd.extend(['-eo', OUTPUT_FORMAT])
     p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
     stdout, stderr = p.communicate()
-    return [extract_line(line) for line in stdout.split('\n') if line]
+    return [line for line in stdout.split('\n') if line]
 
 def _mine_cmd(only_mine_procs):
     if only_mine_procs:
