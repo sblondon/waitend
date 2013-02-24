@@ -46,9 +46,9 @@ def parse_arguments():
     parser.add_argument("process", help="the pending process")
     parser.add_argument("cmd", help="command executed when pid finished")
     parser.add_argument('--delay', dest='delay', default=DEFAULT_DELAY, type=int, 
-                   help='wait DELAY seconds between two process checks')
+        help='wait DELAY seconds between two process checks (default is %ss)' % DEFAULT_DELAY)
     parser.add_argument('--mines', action="store_true",
-                   help='search only in processes owned by user')
+        help='search only in processes owned by user')
     return parser.parse_args()
 
 def process_is_running(process, only_mine_procs):

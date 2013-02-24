@@ -4,16 +4,23 @@ waitproc
 This command line tool for Unix executes a command when another process is 
 ended.
 
+usage: waitproc [-h] [--delay DELAY] [--mines] process cmd
 
-$ waitproc watchedProcess commandToExecute
+Execute a command when another process is ended
 
-watchedProcess is the PID or the commandname of the process.
+positional arguments:
+  process        the PID or the commandname of the pending process
+  cmd            command executed when pid finished
 
-By default, waitproc waits 60 seconds between two checks. The --delay option
-sets up to another delay (in seconds).
+optional arguments:
+  -h, --help     show this help message and exit
+  --delay DELAY  wait DELAY seconds between two process checks
+  --mines        search only in processes owned by user
 
-The --mines option limits the pending process to the processes' owner. It can
-be useful when watchedProcess is a name.
+
+By default, waitproc waits 60 seconds between two checks.
+The --mines could be useful when watchedProcess is a name.
+
 
 Requirements
 ------------
