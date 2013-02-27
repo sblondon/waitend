@@ -83,5 +83,6 @@ def execute_cmd(cmd):
     subprocess.call(cmd.split())
 
 
-main()
+if __name__ == '__main__':
+    main()
 
