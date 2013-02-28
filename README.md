@@ -29,6 +29,14 @@ Requirements
  - `ps`
 
 
+Install
+-------
+
+in a terminal:
+ - go to the src/ directory
+ - execute `python setup.py install --install-scripts=/usr/local/bin` with root privileges
+
+
 Licence
 -------
 
