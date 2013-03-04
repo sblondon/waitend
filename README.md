@@ -1,10 +1,10 @@
-waitproc
-========
+waitend
+=======
 
 This command line tool for Unix executes a command when another process is 
 ended.
 
-usage: waitproc [-h] [--delay DELAY] [--mines] process cmd
+usage: waitend [-h] [--delay DELAY] [--mines] process cmd
 
 Execute a command when another process is ended
 

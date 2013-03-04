@@ -2,14 +2,14 @@
 # -*- coding: utf8 -*-
 
 """
-waitproc   Copyright (C) 2013 Stéphane Blondon
+waitend   Copyright (C) 2013 Stéphane Blondon
 This tool is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation; either version 3 of the License, or
 (at your option) any later version.
 
 
-usage: waitproc [--mines] [--delay DELAY] process command
+usage: waitend [--mines] [--delay DELAY] process command
 
 The process argument is either PID or name.
 

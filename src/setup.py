@@ -2,10 +2,11 @@
 
 from distutils.core import setup
 
+SCRIPT = "waitend"
 
-setup(name="waitproc",
+setup(name=SCRIPT,
         version="0.1.0",
-        scripts=["waitproc"],
-        url="https://github.com/sblondon/waitproc",
+        scripts=[SCRIPT],
+        url="https://github.com/sblondon/%s" % SCRIPT,
       )
 
