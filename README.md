@@ -25,15 +25,8 @@ The --mines could be useful when watchedProcess is a name.
 Requirements
 ------------
 
- - Python 2.7 or 3.x
+ - Python 2.7
  - `ps`
-
-
-Releases
---------
-
-The archives are hosted at http://stephane.yaal.fr/waitend/
-The repository is hosted at https://github.com/sblondon/waitend
 
 
 Install
