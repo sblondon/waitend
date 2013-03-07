@@ -1,0 +1,9 @@
+Credits for Waitend 
+
+
+Stéphane Blondon
+ - Main development
+
+Romuald Brunet
+ - For implementing a simpler way of searching running PID (os.kill)
+
