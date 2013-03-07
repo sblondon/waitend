@@ -54,9 +54,24 @@ def parse_arguments():
 def process_is_running(process, only_mine_procs):
     try:
         pid = int(process)
-        return pid in list_processes(only_mine_procs)
     except ValueError:
         return process in list_processes(only_mine_procs, is_pid=False)
+
+    # check if process is still alive
+    try:
+        os.kill(pid, 0)
+    except OSError, err:
+        # no such process
+        if err.errno == 3:
+            return False
+
+        # Operation not permited
+        if err.errno == 1:
+            return False if only_mine_procs else True
+
+        # Something else went wrong
+        raise
+    return True
 
 def list_processes(only_mine_procs, is_pid=True):
     if is_pid:
