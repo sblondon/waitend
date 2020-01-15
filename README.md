@@ -19,6 +19,7 @@ optional arguments:
 
 
 By default, waitproc waits 60 seconds between two checks.
+
 The --mines could be useful when watchedProcess is a name.
 
 
@@ -33,6 +34,7 @@ Releases
 --------
 
 The archives are hosted at http://stephane.yaal.fr/waitend/
+
 The repository is hosted at https://github.com/sblondon/waitend
 
 
