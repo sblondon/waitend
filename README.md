@@ -25,7 +25,7 @@ The --mines could be useful when watchedProcess is a name.
 Requirements
 ------------
 
- - Python 2.7 or 3.x
+ - Python 3.x
  - `ps`
 
 
@@ -41,7 +41,7 @@ Install
 
 in a terminal:
  - go to the src/ directory
- - execute `python setup.py install --install-scripts=/usr/local/bin` with root privileges
+ - execute `python3 setup.py install --install-scripts=/usr/local/bin` with root privileges
 
 
 Licence
