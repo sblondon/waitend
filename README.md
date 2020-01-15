@@ -40,9 +40,10 @@ Install
 -------
 
 in a terminal:
- - go to the src/ directory
- - execute `python3 setup.py install --install-scripts=/usr/local/bin` with root privileges
-
+```
+# cd src/
+# python3 setup.py install --install-scripts=/usr/local/bin
+```
 
 Licence
 -------
