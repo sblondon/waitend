@@ -62,7 +62,7 @@ def process_is_running(process, only_mine_procs):
         if error_process_not_found(err):
             return False
         elif error_access_on_process(err):
-            return False if only_mine_procs else True
+            return not only_mine_procs
 
         # Something else went wrong
         raise
@@ -78,8 +78,8 @@ def list_processes(only_mine_procs):
     cmd = ['ps', '--no-headers']
     cmd.extend(_mine_cmd(only_mine_procs))
     cmd.extend(["-eo", "command"])
-    p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
-    stdout, stderr = p.communicate()
+    process = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+    stdout, _ = process.communicate()
     return [line.split()[0]
             for line
             in stdout.decode("utf-8").split('\n')
@@ -97,4 +97,3 @@ def execute_cmd(cmd):
 
 if __name__ == '__main__':
     main()
-
