@@ -43,10 +43,9 @@ def main():
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description='Execute a command when another process is ended')
-    
     parser.add_argument("process", help="the pending process")
     parser.add_argument("cmd", help="command executed when pid finished")
-    parser.add_argument('--delay', dest='delay', default=DEFAULT_DELAY, type=int, 
+    parser.add_argument('--delay', dest='delay', default=DEFAULT_DELAY, type=int,
         help='wait DELAY seconds between two process checks (default is %ss)' % DEFAULT_DELAY)
     parser.add_argument('--mines', action="store_true",
         help='search only in processes owned by user')
