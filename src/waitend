@@ -60,7 +60,8 @@ def process_is_running(process, only_mine_procs):
 
     if pid:
         try:
-            os.kill(pid, 0)
+            SIGNAL_NOT_SENT = 0
+            os.kill(pid, SIGNAL_NOT_SENT)
             is_running = True
         except OSError as err:
             if error_process_not_found(err):
