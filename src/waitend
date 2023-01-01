@@ -30,7 +30,7 @@ DEFAULT_DELAY = 60
 def main():
     args = parse_arguments()
     process = args.process
-    delay = int(args.delay)
+    delay = args.delay
     only_mine_procs = args.mines
     cmd = args.cmd
     while True:
