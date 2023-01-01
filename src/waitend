@@ -51,22 +51,25 @@ def parse_arguments():
     return parser.parse_args()
 
 def process_is_running(process, only_mine_procs):
+    is_running = False
     try:
         pid = int(process)
     except ValueError:
-        return process in list_processes(only_mine_procs)
+        pid = None
+        is_running = process in list_processes(only_mine_procs)
 
-    try:
-        os.kill(pid, 0)
-    except OSError as err:
-        if error_process_not_found(err):
-            return False
-        elif error_access_on_process(err):
-            return not only_mine_procs
-
-        # Something else went wrong
-        raise
-    return True
+    if pid:
+        try:
+            os.kill(pid, 0)
+            is_running = True
+        except OSError as err:
+            if error_process_not_found(err):
+                is_running = False
+            elif error_access_on_process(err):
+                is_running = not only_mine_procs
+            else: # Something else went wrong
+                raise
+    return is_running
 
 def error_process_not_found(error):
     return error.errno == errno.ESRCH
